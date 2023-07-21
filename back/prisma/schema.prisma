@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Equipments{
+  id       String @id @default(uuid())
+  serial String
+  description String
+  batch String
+  model String
+  Category     Category     @relation(fields: [model], references: [id])
+  mischaracterize mischaracterize[]
+  Imagens Imagens[]
+  created_at     DateTime    @default(now())
+  @@map("equipments")
+}
+
+model mischaracterize {
+  id       String @id @default(uuid())
+  equipment_id String 
+  destination String?
+  resourcesComplement String
+  state String
+  long String
+  lat String
+  equipment     Equipments?      @relation(fields: [equipment_id], references: [id])
+
+  updateDate DateTime
+  @@map("mischaracterize")
+}
+
+model Imagens{
+  id       String @id @default(uuid())
+  image  String
+  typed String
+  equipment_id String 
+  equipment     Equipments?      @relation(fields: [equipment_id], references: [id])
+ 
+
+  @@map("imagens")
+  
+}
+
+model Category {
+
+  id       String @id @default(uuid())
+  type  String
+  model String
+  Equipments Equipments[]
+  
+
+  @@map("category")
+}
+
+
+model Admin{
+
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+
+  @@map("admin")
+ 
+}
+
+
+
+
+
+
+
